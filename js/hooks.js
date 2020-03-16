@@ -9,7 +9,12 @@ const hooks = [
 function log (body) {
     let _body = typeof body === 'string' ?
       body : JSON.stringify(body);
-    console.log(_body);
+    try {
+        console.log(_body);
+    } catch (e) {
+        console.log(e, body);
+    }
+
 }
 
 function init () {
