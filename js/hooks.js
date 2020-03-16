@@ -14,7 +14,6 @@ function log (body) {
     } catch (e) {
         console.log(e, body);
     }
-
 }
 
 function init () {
