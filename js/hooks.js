@@ -7,13 +7,14 @@ const hooks = [
 ];
 
 function log (body) {
-    let _body = typeof body === 'string' ?
-      body : JSON.stringify(body);
-    try {
-        console.log(_body);
-    } catch (e) {
-        console.log(e, body);
+    if (typeof body !== 'string') {
+        try {
+            body = JSON.stringify(body)
+        } catch (e) {
+            console.error(e.message)
+        }
     }
+    console.log(body);
 }
 
 function init () {
