@@ -26,9 +26,11 @@ function init () {
 }
 
 if (window.lpTag) init();
-else let hooksInterval = window.setInterval(() => {
-    if (window.lpTag) {
-        window.clearInterval(hooksInterval);
-        init();
-    }
-});
+else {
+    let hooksInterval = window.setInterval(() => {
+        if (window.lpTag) {
+            window.clearInterval(hooksInterval);
+            init();
+        }
+    });
+}
