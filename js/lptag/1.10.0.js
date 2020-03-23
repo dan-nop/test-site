@@ -1,10 +1,13 @@
+let params = new URLSearchParams(window.location.search);
+let site = params.get('account') || '85085921';
+
 window.lpTag = window.lpTag || {},
   'undefined' == typeof window.lpTag._tagCount ?
     (
       window.lpTag = {
           wl: lpTag.wl || null,
           scp: lpTag.scp || null,
-          site: '80000850' || '',
+          site,
           section: lpTag.section || '',
           tagletSection: lpTag.tagletSection || null,
           autoStart: lpTag.autoStart !== !1,

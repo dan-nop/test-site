@@ -3,11 +3,12 @@ const hooks = [
     'BEFORE_SUBMIT_SURVEY',
     'BEFORE_SEND_VISITOR_LINE',
     'AFTER_GET_LINES',
-    'BEFORE_SEND_SDE'
+    'BEFORE_SEND_SDE',
+    'BEFORE_ENG_CHANNEL_OPEN',
+    'BEFORE_ENG_DISPLAY'
 ];
 
-function init () {
-    console.log('initing');
+function initHooks () {
     hooks.forEach(hook => {
         lpTag.hooks.push({
             name: hook,
@@ -16,14 +17,4 @@ function init () {
     })
 }
 
-if (window.lpTag) init();
-else {
-    console.log('intervaling');
-    let hooksInterval = window.setInterval(() => {
-        console.log('checking');
-        if (window.lpTag) {
-            window.clearInterval(hooksInterval);
-            init();
-        }
-    },500);
-}
+waitForTag(initHooks);
