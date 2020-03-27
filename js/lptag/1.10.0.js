@@ -1,5 +1,6 @@
 let params = new URLSearchParams(window.location.search);
 let site = params.get('account') || '85085921';
+let alpha = params.get('alpha');
 
 window.lpTag = window.lpTag || {},
   'undefined' == typeof window.lpTag._tagCount ?
@@ -11,10 +12,10 @@ window.lpTag = window.lpTag || {},
           section: lpTag.section || '',
           tagletSection: lpTag.tagletSection || null,
           autoStart: lpTag.autoStart !== !1,
-          ovr: lpTag.ovr || {
+          ovr: lpTag.ovr || alpha ? {
               domain: 'lptag-a.liveperson.net',
               tagjs: 'tags-a.liveperson.net'
-          },
+          } : {},
           _v: '1.10.0',
           _tagCount: 1,
           protocol: 'https:',
