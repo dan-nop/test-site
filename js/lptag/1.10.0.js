@@ -1,4 +1,4 @@
-let params = new URLSearchParams(window.location.search);
+window.params = window.params || new URLSearchParams(window.location.search);
 let site = params.get('account') || '85085921';
 let alpha = params.get('alpha');
 
