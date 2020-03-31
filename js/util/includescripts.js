@@ -11,5 +11,5 @@ scripts.forEach(script => {
     document.head.appendChild(s);
     let p = document.createElement('p');
     p.innerText = `${script}.js loaded`;
-    waitForTag(() => document.body.appendChild(p));
+    setTimeout(() => document.body.appendChild(p),1000);
 });
