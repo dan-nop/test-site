@@ -1,9 +1,9 @@
 function waitForTag (callback) {
     if (window.lpTag) callback();
     else {
-        let hooksInterval = window.setInterval(() => {
+        let _interval = window.setInterval(() => {
             if (window.lpTag) {
-                window.clearInterval(hooksInterval);
+                window.clearInterval(_interval);
                 callback();
             }
         },500);
