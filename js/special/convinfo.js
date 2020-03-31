@@ -4,23 +4,21 @@ function init () {
         callback: opts => {
             if (opts && opts.data && opts.data.line && opts.data.line.text === '/convinfo') {
                 console.log(opts.data.line.text);
-                let engagement = lpTag.events.hasFired('LE_ENGAGER', 'OPEN')[0].data;
-                let convEvents = lpTag.events.hasFired('lpUnifiedWindow', 'conversationInfo');
-                let agentInfo = convEvents.find(c => { return (c.data.agentId || c.data.agentName) }) || {};
-                let convInfo = convEvents.find(c => { return c.data.conversationId }) || {};
-                let skillInfo = convEvents.find(c => { return c.data.skill }) || {};
+                let engagementEvents = lpTag.events.hasFired('LE_ENGAGER', '*');
+                let convEvents = lpTag.events.hasFired('lpUnifiedWindow', '*');
 
                 let data = {
                     siteId: lpTag.site,
                     sections: lpTag.section,
-                    campaign: engagement.campaignId,
-                    engagement: engagement.engagementId,
-                    window: engagement.windowId,
-                    agentName: agentInfo.data.agentName,
-                    agentId: agentInfo.data.agentId,
-                    convId: convInfo.data.conversationIÍd,
-                    skill: skillInfo.data.skill
-
+                    campaign: getLatest(engagementEvents, 'campaignId'),
+                    engagement: getLatest(engagementEvents, 'engagementId'),
+                    window: getLatest(engagementEvents, 'windowId'),
+                    state: getLatest(convEvents, 'state'),
+                    agentName: getLatest(convEvents, 'agentName'),
+                    agentId: getLatest(convEvents, 'agentId'),
+                    convId: getLatest(convEvents, 'conversationId'),
+                    skillId: getLatest(convEvents, 'skill'),
+                    visitorId: getLatest(convEvents, 'visitorId')
                 };
 
                 let div = document.createElement('div');
@@ -39,3 +37,11 @@ function init () {
 
 waitForTag(init);
 
+function getLatest (array, datum) {
+    let _array = array.reverse();
+    let event = _array.find(item => {
+        return item.data && item.data[datum]
+    });
+    if (event) return event.data[datum];
+    else return undefined;
+}
