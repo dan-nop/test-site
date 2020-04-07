@@ -13,3 +13,7 @@ if (params.has('alpha')) {
 if (params.get('sections')) {
     lpTag.section = params.get('sections').split(',')
 }
+
+if (params.get('autostart') === 'false') {
+    lpTag.autoStart = false;
+}
