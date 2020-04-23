@@ -9,14 +9,22 @@
   <script src="js/lptag/1.10.0.js"></script>
   <script src="js/util/includescripts.js"></script>
 </head>
-<body>
-<h4>query param config</h4>
-<p>account=61840567 - change siteid </p>
-<p>alpha=true - use alpha tag</p>
-<p>sections=sec1,sec2 - specify page section(s)</p>
-<p>scripts=script1,script2 - load scripts (hooks, convinfo)</p>
-<p>autostart=false - don't autostart the tag</p>
 
-<h4>log</h4>
+<body>
+  <div>
+    <h4>query param config</h4>
+    <p>account=61840567 - change siteid </p>
+    <p>alpha=true - use alpha tag</p>
+    <p>sections=sec1,sec2 - specify page section(s)</p>
+    <p>scripts=script1,script2 - load scripts (hooks, convinfo)</p>
+    <p>autostart=false - don't autostart the tag</p>
+  </div>
+  <div>
+    <h4>lpTag.newPage</h4>
+    <label for="newPageSections">Sections:</label>
+    <input id="newPageSections">
+    <button onclick="newPage()">lpTag.newPage()</button>
+    <script src="js/util/newpage.js"></script>
+  </div>
 </body>
 </html>

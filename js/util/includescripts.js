@@ -9,7 +9,4 @@ scripts.forEach(script => {
     s.type = 'text/javascript';
     s.src = 'js/scripts/' + script + '.js';
     document.head.appendChild(s);
-    let p = document.createElement('p');
-    p.innerText = `${script}.js loaded`;
-    setTimeout(() => document.body.appendChild(p),1000);
 });
