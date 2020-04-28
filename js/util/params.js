@@ -22,13 +22,15 @@ if (params.has('divids')) {
     document.addEventListener('DOMContentLoaded', () => {
         let ids = params.get('divids').split(',');
         ids.forEach(id => {
-            let a = document.createElement('div'), b = document.createElement('div');
-            a.id = id+'_container';
-            a.className = 'divcontainer';
-            a.innerText = 'container for '+id
-            b.id = id;
+            let a = document.createElement('div'), b = document.createElement('div'), c = document.createElement('div');
+            a.id = id+'_label';
+            a.innerText = 'container for '+id;
+            b.id = id+'_container';
+            b.className = 'divcontainer';
+            c.id = id;
             document.body.appendChild(a);
             a.appendChild(b);
+            b.appendChild(c);
         });
     })
 }

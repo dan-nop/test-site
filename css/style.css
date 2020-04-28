@@ -1,3 +1,7 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
 .divcontainer {
     text-align: center;
     border:1px solid;
