@@ -4,20 +4,25 @@
   <meta charset="UTF-8">
   <title>The Test</title>
   <link rel="icon" type="image/png" href="otis.ico">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="js/util/waitfortag.js"></script>
   <script src="js/util/params.js"></script>
   <script src="js/lptag/1.10.0.js"></script>
+  <script src="js/util/auth.js"></script>
   <script src="js/util/includescripts.js"></script>
 </head>
 
 <body>
   <div>
     <h4>query param config</h4>
-    <p>account=61840567 - change siteid </p>
+    <p>account={61840567} - change siteid </p>
     <p>alpha=true - use alpha tag</p>
-    <p>sections=sec1,sec2 - specify page section(s)</p>
-    <p>scripts=script1,script2 - load scripts (hooks, convinfo)</p>
     <p>autostart=false - don't autostart the tag</p>
+    <p>divids={divid1}, {divid2} - add div ids to the page for embedded engagements</p>
+    <p>randomsub - pass ctmrinfo sde with random sub</p>
+    <p>scripts={script1},{script2} - load scripts (hooks, convinfo, preemptive, etc...)</p>
+    <p>sections={sec1},{sec2} - specify page section(s)</p>
+    <p>sub={somesub} - pass ctmrinfo sde with specified sub</p>
   </div>
   <div>
     <h4>lpTag.newPage</h4>

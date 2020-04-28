@@ -1,6 +1,5 @@
 function newPageInit() {
-    console.log(lpTag);
-    document.getElementById('newPageSections').value = lpTag.section.join(',')
+    document.getElementById('newPageSections').value = lpTag.section ? lpTag.section.join(',') : ''
 }
 
 function newPage() {
