@@ -3,7 +3,7 @@ lpTag = window.lpTag || {};
 lpTag.external = lpTag.external || {};
 lpTag.external.agentInitWidget = {
     // here you will define the regular expression that indicates that a widget link has been sent
-    activationRegex: /Widget Activate: (https:\/\/.+)/,
+    activationRegex: /Please <a href="(https:\/\/.+)" target="_parent">Click Here<\/a> to enter your credit check information\. Completion of this form is permission to run your credit\./,
     // this makes sure that the first burst of messages on a page load doesn't trigger the widget based on prior qualifying agent messages
     firstMessage: true,
     // function to determine whether the widget is already displayed
@@ -11,7 +11,7 @@ lpTag.external.agentInitWidget = {
     // function to process incoming conversation lines
     processLines: function (lineData) {
         // console.log("firstMessage", lpTag.external.agentInitWidget.firstMessage)
-        // console.log("lineData", lineData);
+        console.log("lineData", lineData);
         var lines = lineData && lineData.data && lineData.data.lines;
         if (!lines) return false;
         // console.log("lines", lines)
@@ -35,7 +35,7 @@ lpTag.external.agentInitWidget = {
         lines.forEach(function (line) {
             if (line.source === "agent") {
                 let match = lpTag.external.agentInitWidget.activationRegex.exec(line.text);
-                // console.log("match", match);
+                console.log("match", match);
                 if (match) {
                     if (currentConversation && !lpTag.external.agentInitWidget.firstMessage) {
                         if (!lpTag.external.agentInitWidget.isWidgetDisplayed()) toggleElement.click()
