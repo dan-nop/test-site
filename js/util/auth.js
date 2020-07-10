@@ -19,5 +19,3 @@ if (params.has('sub')) {
 }
 
 lpTag.identities.push(function (cb) { cb(identity) })
-
-
