@@ -29,10 +29,10 @@ lpTag.external.promoAdder = {
             if (line.source === "agent") {
                 let match = lpTag.external.promoAdder.activationRegex.exec(line.text);
                 // console.log("match", match);
-                if (match) {
-					console.log('run script here')
-					// report this event here
-					delete line.text;
+                if (match && !lpTag.external.promoAdder.firstMessage && currentConversation) {
+			console.log('run script here')
+			// report this event here
+			delete line.text;
                 }
             }
         })
