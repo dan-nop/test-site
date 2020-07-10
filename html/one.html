@@ -11,7 +11,8 @@
   <script src="../js/lptag/1.10.0.js"></script>
   <script src="../js/util/auth.js"></script>
   <script src="../js/util/includescripts.js"></script>
-  <script>lpTag.section = ['one','flow','odd']</script>
+  <script>lpTag.section = lpTag.section || [];
+  lpTag.section.concat(lpTag.section = ['one','flow','odd'])</script>
 </head>
 <body>
 <h1>ONE</h1>
