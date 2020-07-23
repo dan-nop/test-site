@@ -32,6 +32,33 @@
     <button onclick="newPage()">lpTag.newPage()</button>
     <script src="js/util/newpage.js"></script>
   </div>
+  <div>
+    <h4>SDEs</h4>
+    <h5>Service Activity</h5>
+    <label for="serviceActivityTopic">topic:</label>
+    <input id="serviceActivityTopic">
+    <label for="serviceActivityStatus">status:</label>
+    <select id="serviceActivityStatus">
+      <option>Undefined</option>
+      <option value="0">0-Complete</option>
+      <option value="1">1-In Progress</option>
+      <option value="2">2- Approved</option>
+      <option value="3">3- cancelled</option>
+      <option value="4">4-Not Approved</option>
+      <option value="5">5-Reviewed</option>
+      <option value="6">6- Missing Details</option>
+      <option value="7">7- Closed</option>
+      <option value="8">8-Removed</option>
+      <option value="9">9-Assigned</option>
+      <option value="10">10-Waiting</option>
+    </select>
+    <label for="serviceActivityCategory">category:</label>
+    <input id="serviceActivityCategory">
+    <label for="serviceActivityServiceId">serviceId:</label>
+    <input id="serviceActivityServiceId">
+    <button onclick="pushSDE('service')">push()</button>
+    <script src="js/util/sdes.js"></script>
+  </div>
 <br />
 </body>
 </html>
