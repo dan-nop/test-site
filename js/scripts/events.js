@@ -1,5 +1,5 @@
 function logEvent(data, { appName, eventName }) {
-    console.groupCollapsed(`${new Date().toLocaleTimeString()}: ${appName}.${eventName}`)
+    console.groupCollapsed(`~&~ ${new Date().getTime()}: ${appName}.${eventName}`)
     console.dir(data)
     console.groupEnd()
 }
@@ -13,7 +13,7 @@ function initEvents () {
           })
           return lpTag.events.bind(app, event, callback)
       }
-    window.setTimeout(() => lpTag.external.retroBind('RENDERER_STUB','AFTER_CREATE_ENGAGEMENT_INSTANCE', logEvent), 1000)
+    window.setTimeout(() => lpTag.external.retroBind('*','*', logEvent), 1000)
 }
 
 waitForTag(initEvents);
