@@ -3,6 +3,7 @@ waitForTag(proactivePopInit);
 function proactivePopInit () {
     lpTag.external = lpTag.external || {};
     lpTag.external.autoClickProactive = {
+        invited: false,
         // note that this list of campaign IDs will be different for the Production account
         campaignWhiteList: [
             1956042030, // Sales-Home-DT
@@ -16,9 +17,19 @@ function proactivePopInit () {
             1972077730, // Sales-Mobile-D
             1972078230, // Sales-Mobile-T
             1972078830, // Sales-Mobile-DT-Returning
-            2066463830 // Sales-Home_Tech_SMB-DT
+            2066463830, // Sales-Home_Tech_SMB-DT
+            1927935130 // LP MM Test Campaign
         ],
-        autoClicker: function (data) {
+        blockReInvite: function (section) {
+            // set the cookie that will indicate that this visitor is excluded from pop-ups in this section
+            document.cookie = `blockInvites_${section}=true;max-age=86400`
+        },
+        reInviteBlocked: function (section) {
+            // check cookie to see if this person is blocked from receiving a pop-up in this section
+            // return bool (false = prevent the popUp)
+            return document.cookie.indexOf(`blockInvites_${section}`) > -1
+        },
+        openWindow: function (data) {
             console.groupCollapsed(`engagement ${data.eng.engData.engagementName} displayed`)
                 console.log(`engagmentId ${data.eng.engData.engagementId}`)
                 console.log(`skill ${data.conf.skillName}`)
@@ -32,25 +43,45 @@ function proactivePopInit () {
 
             // has this person already dismissed an invitation in this section in the past 24 hours?
             // check here for the cookie that indicates they have received a proactive of this sort in the past 24 hours
-            if (cookieExistsIndicatingVisitorHasReceivedThisProactiveRecently()) return false;
+            if (lpTag.external.autoClickProactive.reInviteBlocked('thisSection')) return false;
 
             // is there availability in the relevant skill?
             // Maybe you can add a callback to the getSkillData function, like getSkillData(postParams, callback)
             // and then if availability = true call the callback? Then you could pass in the rendererStub click as the callback
 
             // a short timeout is necessary because the engagement is not yet clickable when the event fires.
-            // If you check availability or do something else that takes some time you won't need the callback
+            // If you check availability or do something else that takes some time you won't need the timeout
             window.setTimeout(() => {
                 lpTag.taglets.rendererStub.click(data.eng.engData.engagementId)
+                lpTag.external.autoClickProactive.invited = true;
                 // set cookie with 24 hour expiration indicating that this person has had an engagement of this sort presented to them
             }, 100);
+        },
+        dismissalDetector: function () {
+            // get window state events from this page visit
+            let windowStateEvents = lpTag.events.hasFired('lpUnifiedWindow', 'state')
+            // has the window been in the "chatting" state during this page visit?
+            let conv = windowStateEvents.find(event => {
+                return event.data.state === 'chatting'
+            })
+            // if the window was opened programmatically and closed without a conversation, prevent subsequent invites
+            if (lpTag.external.autoClickProactive.invited && !conv) {
+                lpTag.external.autoClickProactive.blockReInvite('thisSection')
+            }
         }
     }
 
     lpTag.events.bind({
         eventName: 'AFTER_CREATE_ENGAGEMENT_INSTANCE',
         appName: 'RENDERER_STUB',
-        func: lpTag.external.autoClickProactive.autoClicker()
+        func: lpTag.external.autoClickProactive.openWindow
+    });
+
+    // this event is going to fire when the window is CLOSED, not just minimized
+    lpTag.events.bind({
+        eventName: 'windowClosed',
+        appName: 'lpUnifiedWindow',
+        func: lpTag.external.autoClickProactive.dismissalDetector
     });
 }
 
