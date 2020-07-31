@@ -3,6 +3,7 @@ waitForTag(convInfoInit);
 function convInfoInit () {
     lpTag.external = lpTag.external || {};
     lpTag.external.convInfo = {
+        // this can be called from the console!
         getData: function () {
             let engagementEvents = lpTag.events.hasFired('LE_ENGAGER', '*')
             let convEvents = lpTag.events.hasFired('lpUnifiedWindow', 'conversationInfo')
@@ -39,25 +40,28 @@ function convInfoInit () {
             };
 
             return data;
-
         },
         showData: function (opts) {
             if (opts && opts.data && opts.data.line && opts.data.line.text === '/convinfo') {
 
+                // get the data that will be inserted into the window
                 let data = lpTag.external.convInfo.getData()
 
+                // appended the data to the conversation transcript in the window
                 let div = document.createElement('div');
                 div.id = 'lp_line_convinfo';
                 div.innerText = JSON.stringify(data, null, '\t');
                 document.getElementsByClassName('lpc_transcript')[0].appendChild(div);
 
+                // don't send anything to the agent (unless this is the first message; that can't be stopped)
                 opts.data.line.text = '';
+
+                // scroll to the bottom of the window
                 let scrollable = document.getElementsByClassName('lp_location_center')[0];
                 scrollable.scrollTop = scrollable.scrollHeight
-
-                return data
             }
         },
+        // the "datum" parameter is optional
         _getLatest: function (array, datum) {
             let event = array.reverse().find(item => {
                 return item.data && datum ? item.data[datum] : true
