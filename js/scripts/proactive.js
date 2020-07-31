@@ -26,7 +26,7 @@ function proactivePopInit () {
         },
         reInviteBlocked: function (section) {
             // check cookie to see if this person is blocked from receiving a pop-up in this section
-            // return bool (false = prevent the popUp)
+            // return bool (true = prevent the popUp)
             return document.cookie.indexOf(`blockInvites_${section}`) > -1
         },
         openWindow: function (data) {
