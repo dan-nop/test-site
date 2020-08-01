@@ -11,6 +11,7 @@ function convInfoInit () {
             let renderEvents = lpTag.events.hasFired('RENDERER_STUB','AFTER_CREATE_ENGAGEMENT_INSTANCE')
             let engagementClicks = lpTag.events.hasFired('LP_OFFERS','OFFER_CLICK')
 
+            // todo: account for proactive auto-clicker.
             let clickedEngagement = this._getLatest(engagementClicks) || {};
             let skillId = this._getLatest(convEvents, 'skill');
             let windowState = this._getLatest(windowStateEvents) || {};
@@ -22,24 +23,28 @@ function convInfoInit () {
             let lpVid = lpVidCookie ? lpVidCookie.split('=')[1] : undefined
             let lpSid = lpSidCookie ? lpSidCookie.split('=')[1] : undefined
 
-            let data = {
+            // the window's visitorId property returns the shark vid sometimes, and the pid other times
+            if (lpVid !== this._getLatest(convEvents, 'visitorId')) {
+                lpTag.external.convInfo.pid = this._getLatest(convEvents, 'visitorId')
+            }
+
+            return {
                 siteId: lpTag.site,
                 sections: lpTag.section,
                 campaignId: clickedEngagement.campaignId || this._getLatest(engagementEvents, 'campaignId'),
                 engagementName: clickedEngagement.engagementName || engagementConf.name,
                 engagementId: clickedEngagement.engagementId || this._getLatest(engagementEvents, 'engagementId'),
-                window: clickedEngagement.windowId || this._getLatest(engagementEvents, 'windowId'),
+                windowId: clickedEngagement.windowId || this._getLatest(engagementEvents, 'windowId'),
                 windowState: windowState.state,
+                skillName: engagementConf.skillName,
+                skillId: skillId,
                 agentName: this._getLatest(convEvents, 'agentName'),
                 agentId: this._getLatest(convEvents, 'agentId'),
                 convId: this._getLatest(convEvents, 'conversationId'),
-                skill: engagementConf.skillName || skillId,
+                pid: lpTag.external.convInfo.pid,
                 lpVid,
-                lpSid,
-                visitorId: this._getLatest(convEvents, 'visitorId')
-            };
-
-            return data;
+                lpSid
+            }
         },
         showData: function (opts) {
             if (opts && opts.data && opts.data.line && opts.data.line.text === '/convinfo') {
