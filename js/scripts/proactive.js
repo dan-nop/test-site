@@ -27,7 +27,7 @@ function proactivePopInit () {
         reInviteBlocked: function (section) {
             // check cookie to see if this person is blocked from receiving a pop-up in this section
             // return bool (true = prevent the popUp)
-            return document.cookie.indexOf(`blockInvites_${section}`) > -1
+            return (document.cookie.indexOf(`blockInvites_${section}`) > -1 || lpTag.external.autoClickProactive.blockForThisPage)
         },
         openWindow: function (data) {
             console.groupCollapsed(`engagement ${data.eng.engData.engagementName} displayed`)
@@ -68,6 +68,9 @@ function proactivePopInit () {
             if (lpTag.external.autoClickProactive.invited && !conv) {
                 lpTag.external.autoClickProactive.blockReInvite('thisSection')
             }
+
+            // prevent re-open for this page load
+            lpTag.external.autoClickProactive.blockForThisPage = true;
         }
     }
 
