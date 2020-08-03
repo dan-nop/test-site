@@ -39,8 +39,10 @@ function windowCustomizationInit () {
             for (let mutation of mutationsList) {
                 // console.log(mutation);
                 mutation.addedNodes.forEach(node => {
+                    // nodeType 3 = text node
                     if (node.nodeType === 3 && node.textContent === lpTag.external.custWindow.CONST.MESSAGE_US) {
                         node.textContent = lpTag.external.custWindow.CONST.CHAT_WITH_US
+                        node.innerText = lpTag.external.custWindow.CONST.CHAT_WITH_US
                     }
                 })
             }
