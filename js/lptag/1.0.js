@@ -1,4 +1,4 @@
-window.lpTag = {site:'57746814',
+window.lpTag = {site: lpTag.site,
         section:12,
         ovr:{
                 domain:'hc1d',

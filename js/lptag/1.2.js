@@ -1,6 +1,6 @@
 if(typeof window.lpTag === 'undefined'){
     window.lpTag = {
-        site : '57746814',
+        site : lpTag.site,
         _v : '1.2',
         protocol : location.protocol,
         events : {

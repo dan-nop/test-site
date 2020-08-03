@@ -1,5 +1,5 @@
 window.lpTag = {
-    site : '57746814',
+    site : lpTag.site,
      section:12,
     ovr : {
         domain : 'lptag.efimd.net:8484',
