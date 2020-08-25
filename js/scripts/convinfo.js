@@ -11,7 +11,9 @@ function convInfoInit () {
             let renderEvents = lpTag.events.hasFired('RENDERER_STUB','AFTER_CREATE_ENGAGEMENT_INSTANCE')
             let engagementClicks = lpTag.events.hasFired('LP_OFFERS','OFFER_CLICK')
 
+
             // todo: account for proactive auto-clicker.
+            let displayedEngagements = this._getRenderEventNames(renderEvents) || [];
             let clickedEngagement = this._getLatest(engagementClicks) || {};
             let skillId = this._getLatest(convEvents, 'skill');
             let windowState = this._getLatest(windowStateEvents) || {};
@@ -28,12 +30,14 @@ function convInfoInit () {
                 lpTag.external.convInfo.pid = this._getLatest(convEvents, 'visitorId')
             }
 
+
+
             return {
                 siteId: lpTag.site,
                 sections: lpTag.section,
                 campaignId: clickedEngagement.campaignId || this._getLatest(engagementEvents, 'campaignId'),
-                engagementName: clickedEngagement.engagementName || engagementConf.name,
-                engagementId: clickedEngagement.engagementId || this._getLatest(engagementEvents, 'engagementId'),
+                clickedEngagementName: clickedEngagement.engagementName || engagementConf.name,
+                clickedEngagementId: clickedEngagement.engagementId || this._getLatest(engagementEvents, 'engagementId'),
                 windowId: clickedEngagement.windowId || this._getLatest(engagementEvents, 'windowId'),
                 windowState: windowState.state,
                 skillName: engagementConf.skillName,
@@ -43,7 +47,8 @@ function convInfoInit () {
                 convId: this._getLatest(convEvents, 'conversationId'),
                 pid: lpTag.external.convInfo.pid,
                 lpVid,
-                lpSid
+                lpSid,
+                displayedEngagements: displayedEngagements
             }
         },
         showData: function (opts) {
@@ -79,6 +84,11 @@ function convInfoInit () {
                 return ev && ev.data && ev.data.conf && (ev.data.conf.id === engagementId)
             });
             return event && event.data && event.data.conf
+        },
+        _getRenderEventNames: function (renderEvents) {
+            let engagements = [];
+            renderEvents.forEach(ev => engagements.push(ev.data && ev.data.eng && ev.data.eng.conf && ev.data.eng.conf.name))
+            return engagements;
         }
     }
 
