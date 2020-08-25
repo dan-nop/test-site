@@ -37,7 +37,7 @@ function convInfoInit () {
                 sections: lpTag.section,
                 campaignId: clickedEngagement.campaignId || this._getLatest(engagementEvents, 'campaignId'),
                 clickedEngagementName: clickedEngagement.engagementName || engagementConf.name,
-                clickedEngagementId: clickedEngagement.engagementId || this._getLatest(engagementEvents, 'engagementId'),
+                clickedEngagementId: clickedEngagement.engagementId,
                 windowId: clickedEngagement.windowId || this._getLatest(engagementEvents, 'windowId'),
                 windowState: windowState.state,
                 skillName: engagementConf.skillName,
