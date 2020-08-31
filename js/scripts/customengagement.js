@@ -3,9 +3,9 @@ waitForTag(customEngagement);
 function customEngagement () {
     lpTag.external = lpTag.external || {};
     lpTag.external.custEngagement = {
-        // identifying string from engagement name
+        // identifying string from engagement name.  If the engagement name doesn't contain this string we won't modify it
         engNameString: 'ContextualError',
-        // this is the "opener" configured on the error engagment / window which needs to be replaced with the new string
+        // this is the "opener" configured on the error engagement / window which needs to be replaced with the new string
         placeholder: 'We see you are experiencing issues with your order. Chat now to connect to a live agent for further assistance.',
         // event callback for displayed engagement, which replaces the creative text with the new error message
         customizeProactive: function (data) {
@@ -38,7 +38,7 @@ function customEngagement () {
                         // find a text node containing the placeholder string
                         let textNode = lpTag.external.custEngagement._findNode(lpTag.external.custEngagement.placeholder, mutation.target)
                         // replace the text node with a new one with the new wording
-                        if (textNode) textNode.parentNode.replaceChild(document.createTextNode(lpTag.external.custEngagement.error || textNode.innerText), textNode)
+                        if (textNode) textNode.parentNode.replaceChild(document.createTextNode(error || textNode.innerText), textNode)
                     }
                 }
             })
