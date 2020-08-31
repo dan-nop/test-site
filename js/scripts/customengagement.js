@@ -18,8 +18,8 @@ function customEngagement () {
             let element = document.getElementById(data?.eng?.mainContainer?.id)
             // find the text node containing the placeholder string
             let textNode = lpTag.external.custEngagement._findNode(lpTag.external.custEngagement.placeholder, element)
-            // replace the text node with a new one with the new wording
-            textNode.parentNode.replaceChild(document.createTextNode(error || textNode.innerText), textNode)
+            // replace the text node with a new one containing the error message
+            textNode.parentNode.replaceChild(document.createTextNode(error), textNode)
         },
         // event callback for the window opening, which replaces the welcome message with the new error message
         customizeOpener: function () {
@@ -27,7 +27,7 @@ function customEngagement () {
             let error = lpTag.external.custEngagement._getErrorText();
             if (!error) return false;
 
-            // select the transcript area of the conversation window
+            // select the transcript area(s) of the conversation window(s)
             let transcriptAreas = document.querySelectorAll("[data-lp-point='lines_area']");
             if (!transcriptAreas) return false;
 
@@ -37,13 +37,13 @@ function customEngagement () {
                     if (mutation.addedNodes.length > 0) {
                         // find a text node containing the placeholder string
                         let textNode = lpTag.external.custEngagement._findNode(lpTag.external.custEngagement.placeholder, mutation.target)
-                        // replace the text node with a new one with the new wording
-                        if (textNode) textNode.parentNode.replaceChild(document.createTextNode(error || textNode.innerText), textNode)
+                        // replace the text node with a new one containing the error message
+                        if (textNode) textNode.parentNode.replaceChild(document.createTextNode(error), textNode)
                     }
                 }
             })
 
-            // add the mutation observer to the transcript area
+            // add the mutation observer to the transcript area(s)
             transcriptAreas.forEach(area => {
                 transcriptObserver.observe(area, { childList: true })
             })
