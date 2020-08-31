@@ -1,4 +1,4 @@
-if(typeof window.lpTag === 'undefined'){
+if(typeof window.lpTag === 'undefined' || !window.lpTag.loaded){
     window.lpTag = {
         site : lpTag.site,
         _v : '1.2',

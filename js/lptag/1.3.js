@@ -1,6 +1,6 @@
-if ( typeof window.lpTag === 'undefined' ) {
+if(typeof window.lpTag === 'undefined' || !window.lpTag.loaded){
         window.lpTag = {
-                site:      '',
+                site : lpTag.site,
                 _v:        '1.3',
                 protocol:  location.protocol,
                 events:    {
