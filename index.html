@@ -58,6 +58,19 @@
     <label for="serviceActivityServiceId">serviceId:</label>
     <input id="serviceActivityServiceId">
     <button onclick="pushSDE('service')">push()</button>
+
+    <h5>Error</h5>
+    <label for="errorContextId">contextId:</label>
+    <input id="errorContextId">
+    <label for="errorLevel">level:</label>
+    <input id="errorLevel" type="number">
+    <label for="errorCode">code:</label>
+    <input id="errorCode">
+    <label for="errorMessage">message:</label>
+    <input id="errorMessage">
+    <label for="errorResolved">resolved:</label>
+    <input type="checkbox" id="errorResolved">
+    <button onclick="pushSDE('error')">push()</button>
     <script src="js/util/sdes.js"></script>
   </div>
 <br />
