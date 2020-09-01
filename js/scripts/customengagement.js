@@ -48,8 +48,7 @@ function customEngagement () {
                 transcriptObserver.observe(area, { childList: true })
             })
         },
-        // I'm getting the error message from the SDE but you won't need to do this (and shouldn't).
-        // Just get it from wherever you store it in your data model
+        // Get the text of the error message from wherever you have it stored.
         _getErrorText: function () {
             return 'This is a long sample error message that can be inserted into the engagement when necessary.  It will wrap and stuff.'
         },
