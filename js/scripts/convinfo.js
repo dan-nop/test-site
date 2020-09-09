@@ -5,67 +5,49 @@ function convInfoInit () {
     lpTag.external.convInfo = {
         // this can be called from the console!
         getData: function () {
-            let engagementEvents = lpTag.events.hasFired('LE_ENGAGER', '*')
             let convEvents = lpTag.events.hasFired('lpUnifiedWindow', 'conversationInfo')
             let windowStateEvents = lpTag.events.hasFired('lpUnifiedWindow', 'state')
             let renderEvents = lpTag.events.hasFired('RENDERER_STUB','AFTER_CREATE_ENGAGEMENT_INSTANCE')
             let engagementClicks = lpTag.events.hasFired('LP_OFFERS','OFFER_CLICK')
-
-
             // todo: account for proactive auto-clicker.
-            let displayedEngagements = this._getRenderEventNames(renderEvents) || [];
-            let clickedEngagement = this._getLatest(engagementClicks) || {};
-            let skillId = this._getLatest(convEvents, 'skill');
+            let displayedEngagements = renderEvents.map(this._extractEngDetails) || {};
+            let latestEngagementClick = this._getLatest(engagementClicks) || {};
+            let clickedEngagementRender = this._findRenderEvent(renderEvents, latestEngagementClick.engagementId) || {};
+            let clickedEngagement = this._extractEngDetails(clickedEngagementRender);
             let windowState = this._getLatest(windowStateEvents) || {};
-            let engagementConf = this._findRenderEventConf(renderEvents, clickedEngagement.engagementId) || {};
-
             let lpVidCookie = document.cookie.split('; ').find(row => row.startsWith('LPVID'))
             let lpSidCookie = document.cookie.split('; ').find(row => row.startsWith(`LPSID-${lpTag.site}`))
-
             let lpVid = lpVidCookie ? lpVidCookie.split('=')[1] : undefined
             let lpSid = lpSidCookie ? lpSidCookie.split('=')[1] : undefined
-
             // the window's visitorId property returns the shark vid sometimes, and the pid other times
-            if (lpVid !== this._getLatest(convEvents, 'visitorId')) {
-                lpTag.external.convInfo.pid = this._getLatest(convEvents, 'visitorId')
-            }
-
-
-
+            let ceVid = this._getLatest(convEvents, 'visitorId')
+            let pid = lpVid !== ceVid ? ceVid : undefined;
             return {
-                siteId: lpTag.site,
-                sections: lpTag.section,
-                campaignId: clickedEngagement.campaignId || this._getLatest(engagementEvents, 'campaignId'),
-                clickedEngagementName: clickedEngagement.engagementName || engagementConf.name,
-                clickedEngagementId: clickedEngagement.engagementId,
-                windowId: clickedEngagement.windowId || this._getLatest(engagementEvents, 'windowId'),
-                windowState: windowState.state,
-                skillName: engagementConf.skillName,
-                skillId: skillId,
-                agentName: this._getLatest(convEvents, 'agentName'),
-                agentId: this._getLatest(convEvents, 'agentId'),
-                convId: this._getLatest(convEvents, 'conversationId'),
-                pid: lpTag.external.convInfo.pid,
-                lpVid,
+                clickedEngagement,
+                latestSkillId: this._getLatest(convEvents, "skill"),
+                latestAgentId: this._getLatest(convEvents, "agentId"),
+                latestConvId: this._getLatest(convEvents, "conversationId"),
+                latestAgentName: this._getLatest(convEvents, "agentName"),
+                latestWindowState: this._getLatest(windowStateEvents, "state"),
+                displayedEngagements,
                 lpSid,
-                displayedEngagements: displayedEngagements
+                lpVid,
+                pid,
+                siteId: lpTag.site,
+                sections: lpTag.section
             }
         },
         showData: function (opts) {
             if (opts && opts.data && opts.data.line && opts.data.line.text === '/convinfo') {
-
                 // get the data that will be inserted into the window
                 let data = lpTag.external.convInfo.getData()
-
                 // appended the data to the conversation transcript in the window
                 let div = document.createElement('div');
                 div.id = 'lp_line_convinfo';
                 div.innerText = JSON.stringify(data, null, '\t');
                 document.getElementsByClassName('lpc_transcript')[0].appendChild(div);
-
                 // don't send anything to the agent (unless this is the first message; that can't be stopped)
                 opts.data.line.text = '';
-
                 // scroll to the bottom of the window
                 let scrollable = document.getElementsByClassName('lp_location_center')[0];
                 scrollable.scrollTop = scrollable.scrollHeight
@@ -73,22 +55,37 @@ function convInfoInit () {
         },
         // the "datum" parameter is optional
         _getLatest: function (array, datum) {
-            let event = array.reverse().find(item => {
-                return item.data && datum ? item.data[datum] : true
-            });
+            let event = undefined;
+            if (datum) {
+                for (var i = array.length-1; i>=0; i--) {
+                    if (array[i].data && array[i].data[datum]) {
+                        event = array[i];
+                        break;
+                    }
+                }
+            } else event = array[array.length-1]
+
             if (event && event.data) return datum ? event.data[datum] : event.data;
             else return undefined;
         },
-        _findRenderEventConf: function (renderEvents, engagementId) {
-            let event = renderEvents.find(ev => {
+        _findRenderEvent: function (renderEvents, engagementId) {
+            return renderEvents.find(ev => {
                 return ev && ev.data && ev.data.conf && (ev.data.conf.id === engagementId)
             });
-            return event && event.data && event.data.conf
         },
-        _getRenderEventNames: function (renderEvents) {
-            let engagements = [];
-            renderEvents.forEach(ev => engagements.push(ev.data && ev.data.eng && ev.data.eng.conf && ev.data.eng.conf.name))
-            return engagements;
+        _extractEngDetails: function (renderEvent) {
+            let eng = renderEvent.data && renderEvent.data.eng;
+            if (eng && eng.conf) {
+                return {
+                    campaignId: eng.conf.campaignId,
+                    engagementId: eng.conf.id,
+                    engagementName: eng.conf.name,
+                    skillId: eng.conf.skillId,
+                    skillName: eng.conf.skillName,
+                    container: eng.mainContainer,
+                    windowId: eng.conf.windowId
+                }
+            } else return undefined;
         }
     }
 
