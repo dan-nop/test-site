@@ -27,6 +27,13 @@
     <p>sub={somesub} - pass identity function with specified sub</p>
   </div>
   <div>
+    <h4>Authenticate</h4>
+    <button onclick="pushIdentity()">random sub</button><br /><br />
+    <label for="authSub">Sub:</label>
+    <input id="authSub">
+    <button onclick="pushIdentity(document.getElementById('newPageSections').value)">specified sub</button>
+  </div>
+  <div>
     <h4>lpTag.newPage</h4>
     <label for="newPageSections">Sections:</label>
     <input id="newPageSections">
