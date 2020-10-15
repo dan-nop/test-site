@@ -27,6 +27,8 @@ s.type = 'text/javascript';
 s.src = 'js/lptag/' + lpTag.external._tagV + '.js';
 document.head.appendChild(s)
 
+waitForTag(function updateSiteId () { document.getElementById('accountSpan').innerText = lpTag.site })
+
 // button divs
 
 if (params.has('divids')) {
