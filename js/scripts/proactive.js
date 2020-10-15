@@ -30,16 +30,21 @@ function proactivePopInit () {
             return (document.cookie.indexOf(`blockInvites_${section}`) > -1 || lpTag.external.autoClickProactive.blockForThisPage)
         },
         openWindow: function (data) {
-            console.groupCollapsed(`engagement ${data.eng.engData.engagementName} displayed`)
-                console.log(`engagmentId ${data.eng.engData.engagementId}`)
-                console.log(`skill ${data.conf.skillName}`)
-                console.dir(data)
-            console.groupEnd()
             // is this a proactive engagement?
             if (!(data && data.eng && data.eng.engData && data.eng.engData.engagementType === 1)) return false;
 
             // is the engagement from a whitelisted campaign?
             if (lpTag.external.autoClickProactive.campaignWhiteList.indexOf(data.eng.engData.campaignId) < 0) return false;
+
+            console.log(`engagement ${data.eng.engData.engagementName} displayed`)
+            console.log(`engagmentId ${data.eng.engData.engagementId}`)
+            console.log(`skill ${data.conf.skillName}`)
+            console.log(`id ${data.eng.mainContainer.id}`)
+            console.dir(data)
+            console.log(document.getElementById(data.eng.mainContainer.id))
+            document.getElementById(data.eng.mainContainer.id).addEventListener('load', () => {
+                console.log('load')
+            })
 
             // has this person already dismissed an invitation in this section in the past 24 hours?
             // check here for the cookie that indicates they have received a proactive of this sort in the past 24 hours
@@ -51,11 +56,13 @@ function proactivePopInit () {
 
             // a short timeout is necessary because the engagement is not yet clickable when the event fires.
             // If you check availability or do something else that takes some time you won't need the timeout
+            lpTag.taglets.rendererStub.click(data.eng.engData.engagementId)
+            console.log('clicked')
             window.setTimeout(() => {
                 lpTag.taglets.rendererStub.click(data.eng.engData.engagementId)
                 lpTag.external.autoClickProactive.invited = true;
                 // set cookie with 24 hour expiration indicating that this person has had an engagement of this sort presented to them
-            }, 100);
+            }, 0);
         },
         dismissalDetector: function () {
             // get window state events from this page visit
@@ -87,4 +94,3 @@ function proactivePopInit () {
         func: lpTag.external.autoClickProactive.dismissalDetector
     });
 }
-
