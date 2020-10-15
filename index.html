@@ -35,6 +35,8 @@
   </div>
   <div>
     <h4>SDEs</h4>
+    <script src="js/util/sdes.js"></script>
+
     <h5>Service Activity</h5>
     <label for="serviceActivityTopic">topic:</label>
     <input id="serviceActivityTopic">
@@ -72,6 +74,22 @@
     <input type="checkbox" id="errorResolved">
     <button onclick="pushSDE('error')">push()</button>
     <script src="js/util/sdes.js"></script>
+
+    <h5>Marketing Source</h5>
+    <label for="mrktInfoChannel">channel:</label>
+    <select id="mrktInfoChannel">
+      <option>Undefined</option>
+      <option value="0">0-Direct</option>
+      <option value="1">1-Search</option>
+      <option value="2">2-Social</option>
+      <option value="3">3-Email</option>
+      <option value="4">4-Referral</option>
+    </select>
+    <label for="mrktInfoAffiliate">affiliate:</label>
+    <input id="mrktInfoAffiliate">
+    <label for="mrktInfoCampaignId">campaignId:</label>
+    <input id="mrktInfoCampaignId">
+    <button onclick="pushSDE('mrktInfo')">push()</button>
   </div>
 <br />
 </body>

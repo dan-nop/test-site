@@ -1,3 +1,8 @@
+window.sdes = {}
+
+// todo: add send
+// todo: separate adding sdes to array from push/send
+
 function pushSDE(type) {
     let payload = {type};
     switch (type) {
@@ -34,6 +39,17 @@ function pushSDE(type) {
                 payload.error.resolved = document.getElementById('errorResolved').checked
             }
             break;
+        case 'mrktInfo':
+            payload.info = {}
+            if (document.getElementById('mrktInfoChannel').value !== 'Undefined') {
+                payload.info.channel = parseInt(document.getElementById('mrktInfoChannel').value)
+            }
+            if (document.getElementById('mrktInfoAffiliate').value) {
+                payload.info.affiliate = document.getElementById('mrktInfoAffiliate').value
+            }
+            if (document.getElementById('mrktInfoCampaignId').value) {
+                payload.info.campaignId = document.getElementById('mrktInfoCampaignId').value
+            }
     }
     console.log(`push payload: ${JSON.stringify(payload)}`)
     lpTag.sdes.push(payload);
