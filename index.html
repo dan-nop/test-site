@@ -9,13 +9,13 @@
   <script src="js/util/waitfortag.js"></script>
   <script src="js/util/params.js"></script>
 <!--  <script src="js/lptag/1.10.0.js"></script>-->
-  <script src="js/util/auth.js"></script>
   <script src="js/util/includescripts.js"></script>
 </head>
 
 <body>
+<!--    Query Param Config  -->
   <div>
-    <h4>query param config</h4>
+    <h3>query param config</h3>
     <p>account={<span id="accountSpan">61840567</span>} - change siteid </p>
     <p>alpha=true - use alpha tag</p>
     <p>tag={1.10} - specify tag version. default is 1.10. options are 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 1.10</p>
@@ -25,23 +25,45 @@
     <p>scripts={script1},{script2} - load scripts (hooks, convinfo, preemptive, etc...)</p>
     <p>sections={sec1},{sec2} - specify page section(s)</p>
     <p>sub={somesub} - pass identity function with specified sub</p>
+    <p>external - use the hardcoded JWT for authenticated messaging (for use when not on LP VPN but using my key)</p>
   </div>
+<!--    lpTag.newPage() -->
+<div>
+  <h3>lpTag.newPage</h3>
+  <label for="newPageSections">Sections:</label>
+  <input id="newPageSections">
+  <button onclick="newPage()">lpTag.newPage()</button>
+  <script src="js/util/newpage.js"></script>
+</div>
+<!--    Authentication  -->
   <div>
-    <h4>Authenticate</h4>
-    <button onclick="pushIdentity()">random sub</button><br /><br />
+    <h3>Authentication</h3>
+    <h4>My Key</h4>
+    <label for="authPubKey">Pubkey:</label><br />
+    <textarea id="authPubKey" disabled cols=50 rows=8>MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA73U7Jmf//QZi/JiTSNWrXSa98et+JRFm1nkF5dYArJ33ehYRdnu83wM6/zSdgUfTFNjNY6k+TvHTr2iaV69gLMDlI+Nyp7oxiBC7uRjapAYad2Hkmp9y54gvM9I0yfzdLHf6vVSU+M37qUD1UdoPe16SBZLynBvQ3mndijOqTgMhxHSEcmcO2Bv3UDJauSmKDhEalfDvF6t/libv8yobC6QjLDVw3JrHazh/bvU6gBBuOSJqCN95RsAPo4nNZQvEefG+a5JHHh00NfqOZLmauHezgDLyC/g3lOCX9W1ui3Xn6hyv84hafKkloZn3efqmUo+GtCWouRJ/6ZN5roF9DQIDAQAB</textarea>
+    <br /><br />
+    <label for="authHardCodedJWT">    <input type="checkbox" id="authHardCode">
+      <label for="authHardCode">Use hardcoded JWT (check this if not on LP VPN)</label></label><br />
+    <textarea id="authHardCodedJWT" disabled cols=100 rows=11>eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBwb3J0X2FwaSIsImlhdCI6MTYwMjg4MzM3NSwiZXhwIjoxNjM0NDIzMzc1LCJzdWIiOiIxMzg3NjZBQyIsImxwX3NkZXMiOlt7InR5cGUiOiJjdG1yaW5mbyIsImluZm8iOnsiY3N0YXR1cyI6ImNhbmNlbGxlZCIsImN0eXBlIjoidmlwIiwiY3VzdG9tZXJJZCI6IjEzODc2NkFDIiwiYmFsYW5jZSI6LTQwMC45OSwic29jaWFsSWQiOiIxMTI1NjMyNDc4MCIsImltZWkiOiIzNTQzNTQ2NTQzNTQ1Njg4IiwidXNlck5hbWUiOiJ1c2VyMDAwIiwiY29tcGFueVNpemUiOjUwMCwiYWNjb3VudE5hbWUiOiJiYW5rIGNvcnAiLCJyb2xlIjoiYnJva2VyIiwibGFzdFBheW1lbnREYXRlIjp7ImRheSI6MTUsIm1vbnRoIjoxMCwieWVhciI6MjAxNH0sInJlZ2lzdHJhdGlvbkRhdGUiOnsiZGF5IjoyMywibW9udGgiOjUsInllYXIiOjIwMTN9fX1dfQ.Rov4t88KpDEaAZbr9kl3N4QI2QFm_uShwpKEAPFwx-13i7HgsOV9fAlwXYqUhH7IERvMsGBepnGJ3n1CiF4Y4kGihwY4lWDDI0PeOsLFGVnDbeJgwPGC-TV2IPtAoCiPt_nVNU_1J1RuLFcRgHPc14cg2qLATIoIUnQGWOBbj3J26PwVKbjjfsZOJvBHe8fmipzGLeF0TExvaBolYXEZotKOzMq3sllURtunIQ3ybnIshwL5PyS-3bkwP-7dpIFboPB3vVB6g3SjR1Cvx1WSeQtilM8mjt2ro8NEV895lNCX7hDAw-WW-ueae21nvFuAxjpBiQdibMDbeKj5ZlRMJQ</textarea>
+
+    <h4>Your Key</h4>
+    <p>Putting a token here overrides the "use hardcoded JWT" checkbox above</p>
+    <label for="authYourJWT">Your JWT:</label><br />
+    <textarea id="authYourJWT" cols=100 rows=11 placeholder="Paste your JWT token here.  It should be signed using the private key which corresponds to the public key in your account's Data Sources > Integrations > Authentication Server config."></textarea>
+
+    <h4>Push Identity Function Manually</h4>
+    <input type="checkbox" id="authNewPageAfterIdentity" checked>
+    <label for="authNewPageAfterIdentity">Automatically call lpTag.newPage after pushing identity function</label>
+    <br /><br />
     <label for="authSub">Sub:</label>
-    <input id="authSub">
-    <button onclick="pushIdentity(document.getElementById('newPageSections').value)">specified sub</button>
+    <input id="authSub" placeholder="random">
+    <button onclick="pushIdentity(document.getElementById('authSub').value, true)">set identity</button>
+
+    <script src="js/util/auth.js"></script>
   </div>
+<!--    SDEs  -->
   <div>
-    <h4>lpTag.newPage</h4>
-    <label for="newPageSections">Sections:</label>
-    <input id="newPageSections">
-    <button onclick="newPage()">lpTag.newPage()</button>
-    <script src="js/util/newpage.js"></script>
-  </div>
-  <div>
-    <h4>SDEs</h4>
+    <h3>SDEs</h3>
     <script src="js/util/sdes.js"></script>
 
     <h5>Service Activity</h5>
