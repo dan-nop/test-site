@@ -21,7 +21,7 @@ function pushIdentity (sub, fromButton = false) {
         sub: sub || params.get('sub') || Math.random().toString(36).substring(2)
     }
     lpTag.identities.push(function ident (cb) { cb(identity) })
-    if (fromButton && document.getElementById('authNewPageAfterIdentity')) newPage()
+    if (fromButton && document.getElementById('authNewPageAfterIdentity').checked) newPage()
 }
 
 lpGetAuthenticationToken = function (cb) {
