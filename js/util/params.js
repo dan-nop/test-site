@@ -30,7 +30,6 @@ document.head.appendChild(s)
 waitForTag(function updateSiteId () { document.getElementById('accountSpan').innerText = lpTag.site })
 
 // button divs
-
 if (params.has('divids')) {
     document.addEventListener('DOMContentLoaded', () => {
         let ids = params.get('divids').split(',');
