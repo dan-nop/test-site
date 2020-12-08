@@ -39,6 +39,9 @@ function pushIdentity (sub, fromButton = false) {
     }
     // push the identity
     lpTag.identities.push(function ident (cb) { cb(window._auth.identity) })
+    // send the unauth customerInfo SDE (this helps with popped-out windows, so that the sub can be identified
+    // from the visitor session
+    waitForTag(function sendCtmrInfoSDE () {lpTag.sdes.send({ type: "ctmrinfo", info: { customerId: sub }})})
     // disable the button
     document.getElementById('pushIdentity').disabled = true;
     // if this came from a button click and the checkbox is checked, do the newPage
