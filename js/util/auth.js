@@ -21,8 +21,8 @@ if (params.has('sub')) {
     window._auth.sub = window._auth.sub || Math.random().toString(36).substring(2)
     window.params.delete('randomsub');
     window.params.append('sub', window._auth.sub)
-    history.replaceState(null, null, window.params.toString())
-    pushIdentity()
+    history.replaceState(null, null, `?${window.params.toString()}`)
+    location.reload()
 }
 
 function pushIdentity (sub, fromButton = false) {
