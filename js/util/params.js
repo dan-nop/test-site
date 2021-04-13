@@ -5,11 +5,11 @@ window.params = window.params || new URLSearchParams(window.location.search);
 // set account
 lpTag.site = params.get('account') || '85085921';
 
-// alpha tag
-if (params.has('alpha')) lpTag.ovr = { domain: 'lptag-a.liveperson.net', tagjs: 'tags-a.liveperson.net' }
-
 // cdn tag
 if (params.has('cdn')) lpTag.ovr = { domain: 'lptag-cdn.liveperson.net', tagjs: 'lptag-cdn.liveperson.net' }
+// alpha tag
+
+if (params.has('alpha')) lpTag.ovr = { domain: 'lptag-a.liveperson.net', tagjs: 'tags-a.liveperson.net' }
 
 // sections
 if (params.get('sections')) lpTag.section = params.get('sections').split(',')
