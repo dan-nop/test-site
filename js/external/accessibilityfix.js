@@ -1,5 +1,7 @@
+// put custom code in lpTag.external to keep the js namespace clean
 lpTag.external = lpTag.external || {};
 lpTag.external.accessibilityFix = {
+    // get and cache all of the zones on the account
     getZones: function () {
         var zonesLoaded = lpTag.events.hasFired("SCRAPER","ZONES_LOADED");
         if (zonesLoaded && zonesLoaded[0] && zonesLoaded[0].data) {
@@ -7,13 +9,15 @@ lpTag.external.accessibilityFix = {
         }
         return lpTag.external.accessibilityFix.zones;
     },
+    // handle the offer_impression event
     engagementRenderedHandler: function (data) {
-        console.log(data)
         try {
+            // fetch zones
             var possibleZones = lpTag.external.accessibilityFix.zones || lpTag.external.accessibilityFix.getZones();
+            // is this an embedded button (engagementType 5) and an HTML engagement (renderingType 1)
             if (data.engagementType === 5 && data.renderingType === 1) {
-                var offerZone = data.zoneId;
-                var thisZone = possibleZones.find(function (possibleZone) { return possibleZone.id === offerZone})
+                // find the zone
+                var thisZone = possibleZones.find(function (possibleZone) { return possibleZone.id === data.zoneId})
                 // remove role and tabindex from relevant div
                 if (thisZone) {
                     const selectedDiv = document.getElementById(thisZone.name);
