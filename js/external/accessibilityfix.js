@@ -28,5 +28,5 @@ lpTag.external.accessibilityFix = {
     }
 }
 
-lpTag.events.bind('LP_OFFERS','OFFER_IMPRESSION', lpTag.external.engagementRenderedHandler);
+lpTag.events.bind('LP_OFFERS','OFFER_IMPRESSION', lpTag.external.accessibilityFix.engagementRenderedHandler);
 console.log('accessibilityfix loaded');
