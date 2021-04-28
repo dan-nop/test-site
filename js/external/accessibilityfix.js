@@ -11,7 +11,7 @@ lpTag.external.accessibilityFix = {
         console.log(data)
         try {
             var possibleZones = lpTag.external.accessibilityFix.zones || lpTag.external.accessibilityFix.getZones();
-            if (data.engagementType === 5) {
+            if (data.engagementType === 5 && data.renderingType === 1) {
                 var offerZone = data.zoneId;
                 var thisZone = possibleZones.find(function (possibleZone) { return possibleZone.id === offerZone})
                 // remove role and tabindex from relevant div
