@@ -20,9 +20,24 @@ function getScriptParams() {
     return params;
 }
 
+function getDivs () {
+    var divs = [];
+    var zonesLoaded = lpTag.events.hasFired("SCRAPER","ZONES_LOADED")
+    if (zonesLoaded && zonesLoaded[0] && zonesLoaded[0].data) {
+        zonesLoaded[0].data.forEach(function (zone) {
+            if (zone.zoneType === 0) {
+                divs.push(zone.name)
+            }
+        })
+    }
+    return divs;
+}
+
+
+
 function engagementRenderedHandler () {
     try {
-        const divs = getScriptParams().divids;
+        const divs = getDivs();
 
         // remove role and tabindex from specified divs above
         divs.forEach((divName) => {

@@ -1,0 +1,11 @@
+.lpc_window_slider-open {
+    height: 870px!important;
+}
+
+.lpc_slider {
+    width: 680px!important;
+}
+
+.lpc_maximized-header__slider-button {
+    display:none!important;
+}
