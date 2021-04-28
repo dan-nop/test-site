@@ -7,8 +7,8 @@ lpTag.external.accessibilityFix = {
         }
         return this.zones;
     },
-    engagementRenderedHandler: function (data, b, c) {
-        console.log(data,b,c)
+    engagementRenderedHandler: function (data) {
+        console.log(data)
         try {
             var possibleZones = this.zones || this.getZones();
             if (data.data.engagementType === 5) {
