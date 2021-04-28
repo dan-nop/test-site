@@ -3,14 +3,14 @@ lpTag.external.accessibilityFix = {
     getZones: function () {
         var zonesLoaded = lpTag.events.hasFired("SCRAPER","ZONES_LOADED");
         if (zonesLoaded && zonesLoaded[0] && zonesLoaded[0].data) {
-            this.zones = zonesLoaded[0].data;
+            lpTag.external.accessibilityFix.zones = zonesLoaded[0].data;
         }
-        return this.zones;
+        return lpTag.external.accessibilityFix.zones;
     },
     engagementRenderedHandler: function (data) {
         console.log(data)
         try {
-            var possibleZones = this.zones || this.getZones();
+            var possibleZones = lpTag.external.accessibilityFix.zones || lpTag.external.accessibilityFix.getZones();
             if (data.data.engagementType === 5) {
                 var offerZone = data.data.zoneId;
                 var thisZone = possibleZones.find(function (possibleZone) { return possibleZone.id === offerZone})
