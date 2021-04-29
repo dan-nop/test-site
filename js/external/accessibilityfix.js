@@ -12,7 +12,10 @@ lpTag.external.accessibilityFix = {
                 // find the zone
                 var thisZone;
                 for (var i=0; i < possibleZones.length; i++) {
-                    if (possibleZones[i].id === data.zoneId) { thisZone = possibleZones[i]}
+                    if (possibleZones[i].id === data.zoneId) {
+                        thisZone = possibleZones[i];
+                        break;
+                    }
                 }
                 // remove role and tabindex from relevant div
                 if (thisZone) {
