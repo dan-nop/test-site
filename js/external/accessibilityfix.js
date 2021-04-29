@@ -6,7 +6,7 @@ lpTag.external.accessibilityFix = {
         try {
             // fetch zones
             var zonesLoaded = lpTag.events.hasFired('SCRAPER','ZONES_LOADED')
-            var possibleZones = onesLoaded && zonesLoaded[0] && zonesLoaded[0].data
+            var possibleZones = zonesLoaded && zonesLoaded[0] && zonesLoaded[0].data
             // is this an embedded button (engagementType 5) and an HTML engagement (renderingType 1)
             if (data.engagementType === 5 && data.renderingType === 1) {
                 // find the zone
