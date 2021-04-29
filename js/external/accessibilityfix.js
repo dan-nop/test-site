@@ -4,12 +4,11 @@ lpTag.external.accessibilityFix = {
     // handle the offer_impression event
     engagementRenderedHandler: function (data) {
         try {
-            // fetch zones
-            var zonesLoaded = lpTag.events.hasFired('SCRAPER','ZONES_LOADED')
-            var possibleZones = zonesLoaded && zonesLoaded[0] && zonesLoaded[0].data
             // is this an embedded button (engagementType 5) and an HTML engagement (renderingType 1)
             if (data.engagementType === 5 && data.renderingType === 1) {
                 // find the zone
+                var zonesLoaded = lpTag.events.hasFired('SCRAPER','ZONES_LOADED');
+                var possibleZones = zonesLoaded && zonesLoaded[0] && zonesLoaded[0].data;
                 var thisZone;
                 for (var i=0; i < possibleZones.length; i++) {
                     if (possibleZones[i].id === data.zoneId) {
@@ -17,12 +16,20 @@ lpTag.external.accessibilityFix = {
                         break;
                     }
                 }
-                // remove role and tabindex from relevant div
+                // remove role and tabindex from relevant div if necessary
                 if (thisZone) {
                     const selectedDiv = document.getElementById(thisZone.name);
                     const selectedDivLpm = selectedDiv.querySelector('.LPMcontainer');
-                    if (selectedDivLpm.getAttribute('role') === 'button') selectedDivLpm.removeAttribute('role');
-                    if (selectedDivLpm.getAttribute('tabindex') === '0') selectedDivLpm.removeAttribute('tabindex');
+                    const clickableElement = selectedDivLpm.querySelector('[data-lp-event=click]');
+                    // do both the clickable element and the container div have role=button?
+                    if (clickableElement.getAttribute('role') === 'button' && selectedDivLpm.getAttribute('role') === 'button') {
+                        selectedDivLpm.removeAttribute('role');
+                    }
+
+                    // do both the clickable element and the container div have tab indices > -1?
+                    if (parseInt(clickableElement.getAttribute('tabindex')) > -1 && parseInt(selectedDivLpm.getAttribute('tabindex')) > -1) {
+                        selectedDivLpm.setAttribute('tabindex', '-1');
+                    }
                 }
             }
         } catch (e) {
