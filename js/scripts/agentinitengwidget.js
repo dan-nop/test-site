@@ -42,6 +42,7 @@ lpTag.external.agentInitWidget = {
                         var iframeElement = document.querySelector('div#LP_WidgetViewController_1>iframe');
                         iframeElement.src = match[1]
                     }
+                    // remove the line from the conversation (optional)
                     delete line.text;
                 }
             }

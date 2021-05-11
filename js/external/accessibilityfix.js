@@ -16,20 +16,45 @@ lpTag.external.accessibilityFix = {
                         break;
                     }
                 }
-                // remove role and tabindex from relevant div if necessary
+                // remove role from and update tabindex on relevant div if necessary
                 if (thisZone) {
                     const selectedDiv = document.getElementById(thisZone.name);
                     const selectedDivLpm = selectedDiv.querySelector('.LPMcontainer');
                     const clickableElement = selectedDivLpm.querySelector('[data-lp-event=click]');
-                    // do both the clickable element and the container div have role=button?
-                    if (clickableElement.getAttribute('role') === 'button' && selectedDivLpm.getAttribute('role') === 'button') {
+
+                    // if the clickable element doesn't have role=button add it
+                    if (clickableElement.getAttribute('role') !== 'button') {
+                        clickableElement.setAttribute('role', 'button');
+                        console.log('01216353 '+thisZone.name+' role added')
+                    }
+
+                    // if the container div has role=button remove it
+                    if (selectedDivLpm.getAttribute('role') === 'button') {
                         selectedDivLpm.removeAttribute('role');
+                        console.log('01216353 '+thisZone.name+' role removed');
+                    }
+
+                    // do both the clickable element and the container div have role=button?
+                    // if (clickableElement.getAttribute('role') === 'button' && selectedDivLpm.getAttribute('role') === 'button') {
+                    //     selectedDivLpm.removeAttribute('role');
+                    // }
+
+                    // if the clickable element doesn't have tab index > -1 set it
+                    if (!(parseInt(clickableElement.getAttribute('tabindex')) > -1)) {
+                        clickableElement.setAttribute('tabIndex', '0');
+                        console.log('01216353 '+thisZone.name+' tabindex 0');
+                    }
+
+                    // if the container div has tabindex > -1 change it
+                    if (parseInt(selectedDivLpm.getAttribute('tabindex')) > -1) {
+                        selectedDivLpm.setAttribute('tabindex', '-1');
+                        console.log('01216353 '+thisZone.name+' tabindex -1');
                     }
 
                     // do both the clickable element and the container div have tab indices > -1?
-                    if (parseInt(clickableElement.getAttribute('tabindex')) > -1 && parseInt(selectedDivLpm.getAttribute('tabindex')) > -1) {
-                        selectedDivLpm.setAttribute('tabindex', '-1');
-                    }
+                    // if (parseInt(clickableElement.getAttribute('tabindex')) > -1 && parseInt(selectedDivLpm.getAttribute('tabindex')) > -1) {
+                    //     selectedDivLpm.setAttribute('tabindex', '-1');
+                    // }
                 }
             }
         } catch (e) {
