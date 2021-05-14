@@ -72,12 +72,12 @@ function convInfoInit() {
             if (event && event.data) return datum ? event.data[datum] : event.data;
             else return undefined;
         },
-        _findRenderEvent: function _findRenderEventConf(renderEvents, engagementId) {
+        _findRenderEvent: function _findRenderEvent(renderEvents, engagementId) {
             return renderEvents.find(function(ev) {
                 return (ev && ev.data && ev.data.conf && ev.data.conf.id === engagementId);
             });
         },
-        _extractEngDetails: function _returnEngDetails(renderEvent) {
+        _extractEngDetails: function _extractEngDetails(renderEvent) {
             var eng = renderEvent.data && renderEvent.data.eng;
             if (eng && eng.conf) {
                 var details = {
