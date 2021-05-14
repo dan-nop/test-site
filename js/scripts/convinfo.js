@@ -5,12 +5,20 @@ function convInfoInit () {
     lpTag.external.convInfo = {
         // this can be called from the console!
         getData: function () {
+            let allEvents = lpTag.events.hasFired('*','*');
             let convEvents = lpTag.events.hasFired('lpUnifiedWindow', 'conversationInfo')
             let windowStateEvents = lpTag.events.hasFired('lpUnifiedWindow', 'state')
             let renderEvents = lpTag.events.hasFired('RENDERER_STUB','AFTER_CREATE_ENGAGEMENT_INSTANCE')
             let engagementClicks = lpTag.events.hasFired('LP_OFFERS','OFFER_CLICK')
             // todo: account for proactive auto-clicker.
+            let eventMap = allEvents.map(e => e.appName+e.eventName)
+            let startPageIndex = eventMap.lastIndexOf('lp_monitoringSDKSP_SENT')
+            let eventsAfterSP = allEvents.slice(startPageIndex);
+            let engagementsAfterSP = eventsAfterSP.filter(e => {
+                return e.appName === 'RENDERER_STUB' && e.eventName === 'AFTER_CREATE_ENGAGEMENT_INSTANCE'
+            })
             let displayedEngagements = renderEvents.map(this._extractEngDetails) || {};
+            let lastDisplayedEngagements = engagementsAfterSP.map(this._extractEngDetails) || [];
             let latestEngagementClick = this._getLatest(engagementClicks) || {};
             let clickedEngagementRender = this._findRenderEvent(renderEvents, latestEngagementClick.engagementId) || {};
             let clickedEngagement = this._extractEngDetails(clickedEngagementRender);
@@ -30,6 +38,7 @@ function convInfoInit () {
                 latestAgentName: this._getLatest(convEvents, "agentName"),
                 latestWindowState: this._getLatest(windowStateEvents, "state"),
                 displayedEngagements,
+                lastDisplayedEngagements,
                 lpSid,
                 lpVid,
                 pid,
@@ -64,6 +73,8 @@ function convInfoInit () {
                     }
                 }
             } else event = array[array.length-1]
+
+
 
             if (event && event.data) return datum ? event.data[datum] : event.data;
             else return undefined;
