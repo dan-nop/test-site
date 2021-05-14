@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bookmarklets</title>
+  <style>
+      .button {
+          font: bold 11px Arial;
+          text-decoration: none;
+          background-color: #EEEEEE;
+          color: #333333;
+          padding: 2px 6px 2px 6px;
+          border-top: 1px solid #CCCCCC;
+          border-right: 1px solid #333333;
+          border-bottom: 1px solid #333333;
+          border-left: 1px solid #CCCCCC;
+      }
+  </style>
+</head>
+<body>
+
+<a
+    class="button"
+    href="javascript:(function(){var bookmarklet=document.createElement('script'),url=location.protocol+'//donmanguno.github.io/test-site/js/bookmarklets/lpinfo.js?ts='+new Date().getTime();bookmarklet.setAttribute('src',url);document.body.appendChild(bookmarklet);}());">
+  LivePersonInfo
+</a>
+
+</body>
+</html>
