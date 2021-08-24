@@ -94,3 +94,11 @@ function proactivePopInit () {
         func: lpTag.external.autoClickProactive.dismissalDetector
     });
 }
+
+lpTag.events.bind({
+    eventName: 'AFTER_CREATE_ENGAGEMENT_INSTANCE',
+    appName: 'RENDERER_STUB',
+    func: data => {
+        lpTag.taglets.rendererStub.click(data.eng.engData.engagementId)
+    }
+});

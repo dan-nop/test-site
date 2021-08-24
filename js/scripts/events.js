@@ -1,4 +1,10 @@
 function logEvent(data, { appName, eventName }) {
+    if (params && params.has('events:appfilter')) {
+        let apps = params.get('events:appfilter').split(',').map(a => a.toLowerCase())
+        if (!apps.includes(appName.toLowerCase())) {
+            return null;
+        }
+    }
     console.groupCollapsed(`~&~ ${new Date().getTime()}: ${appName}.${eventName}`)
     console.dir(data)
     console.groupEnd()

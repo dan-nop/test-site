@@ -30,7 +30,8 @@
     <h4>Auth</h4>
     <p>randomsub - pass identity function with random sub</p>
     <p>sub={somesub} - pass identity function with specified sub</p>
-    <p>externalauth - use the hardcoded JWT for authenticated messaging (for use when not on LP VPN but using my key)</p>
+    <p>externalauth - use the hardcoded JWT for authenticated messaging (For use when not on LP VPN but using my key. Only works with embedded window & implicit flow.)</p>
+    <p>auth-ngrok={093e70fd1c6f} - use an ngrok domain for the auth server (alternate server also has to be configured in LE auth settings)</p>
   </div>
 <!--    lpTag.newPage() -->
 <div>
@@ -74,7 +75,7 @@
     <br /><br />
     <label for="authHardCodedJWT">
       <input type="checkbox" id="authHardCode">
-      <label for="authHardCode">Use hardcoded JWT (check this if not on LP VPN)</label>
+      <label for="authHardCode">Use hardcoded JWT (Check this if not on LP VPN. Only works with embedded window & implicit flow.)</label>
     </label><br />
     <textarea id="authHardCodedJWT" disabled cols=100 rows=11>eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBwb3J0X2FwaSIsImlhdCI6MTYwMjg4MzM3NSwiZXhwIjoxNjM0NDIzMzc1LCJzdWIiOiIxMzg3NjZBQyIsImxwX3NkZXMiOlt7InR5cGUiOiJjdG1yaW5mbyIsImluZm8iOnsiY3N0YXR1cyI6ImNhbmNlbGxlZCIsImN0eXBlIjoidmlwIiwiY3VzdG9tZXJJZCI6IjEzODc2NkFDIiwiYmFsYW5jZSI6LTQwMC45OSwic29jaWFsSWQiOiIxMTI1NjMyNDc4MCIsImltZWkiOiIzNTQzNTQ2NTQzNTQ1Njg4IiwidXNlck5hbWUiOiJ1c2VyMDAwIiwiY29tcGFueVNpemUiOjUwMCwiYWNjb3VudE5hbWUiOiJiYW5rIGNvcnAiLCJyb2xlIjoiYnJva2VyIiwibGFzdFBheW1lbnREYXRlIjp7ImRheSI6MTUsIm1vbnRoIjoxMCwieWVhciI6MjAxNH0sInJlZ2lzdHJhdGlvbkRhdGUiOnsiZGF5IjoyMywibW9udGgiOjUsInllYXIiOjIwMTN9fX1dfQ.Rov4t88KpDEaAZbr9kl3N4QI2QFm_uShwpKEAPFwx-13i7HgsOV9fAlwXYqUhH7IERvMsGBepnGJ3n1CiF4Y4kGihwY4lWDDI0PeOsLFGVnDbeJgwPGC-TV2IPtAoCiPt_nVNU_1J1RuLFcRgHPc14cg2qLATIoIUnQGWOBbj3J26PwVKbjjfsZOJvBHe8fmipzGLeF0TExvaBolYXEZotKOzMq3sllURtunIQ3ybnIshwL5PyS-3bkwP-7dpIFboPB3vVB6g3SjR1Cvx1WSeQtilM8mjt2ro8NEV895lNCX7hDAw-WW-ueae21nvFuAxjpBiQdibMDbeKj5ZlRMJQ</textarea>
 
@@ -85,11 +86,16 @@
 
     <h4>Push Identity Function Manually</h4>
     <input type="checkbox" id="authNewPageAfterIdentity" checked>
-    <label for="authNewPageAfterIdentity">Automatically call lpTag.newPage after pushing identity function</label>
+    <label for="authNewPageAfterIdentity">Automatically call lpTag.newPage() page after pushing identity function</label>
     <br /><br />
     <label for="authSub">Sub:</label>
     <input id="authSub" placeholder="random">
     <button id="pushIdentity" onclick="pushIdentity(document.getElementById('authSub').value, true)">set identity</button>
+
+    <h4>Step Up</h4>
+    <label for="stepUpSub">Sub:</label>
+    <input id="stepUpSub" placeholder="random">
+    <button id="stepUp" onclick="stepUp(document.getElementById('stepUpSub').value)">refresh with identity</button>
 
     <script src="js/util/auth.js"></script>
   </div>
