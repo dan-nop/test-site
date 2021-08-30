@@ -10,7 +10,7 @@ function logEvent(data, { appName, eventName }) {
     console.groupEnd()
 }
 
-function initEvents () {
+function eventsInit () {
     lpTag.external = lpTag.external || {};
     lpTag.external.retroBind = lpTag.external.retroBind || function (app, event, callback) {
           let pastEvents = lpTag.events.hasFired(app, event)
@@ -22,4 +22,4 @@ function initEvents () {
     window.setTimeout(() => lpTag.external.retroBind('*','*', logEvent), 1000)
 }
 
-waitForTag(initEvents);
+waitForTag(eventsInit);

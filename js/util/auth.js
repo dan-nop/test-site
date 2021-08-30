@@ -46,7 +46,8 @@ function pushIdentity (sub, fromButton = false) {
     lpTag.identities.push(function ident (cb) { cb(window._auth.identity) })
     // send the unauth customerInfo SDE (this helps with popped-out windows, so that the sub can be identified
     // from the visitor session
-    waitForTag(function sendCtmrInfoSDE () {lpTag.sdes.send({ type: "ctmrinfo", info: { customerId: sub }})})
+    waitForTag(function sendCtmrInfoSDE () {lpTag.sdes.push({ type: "ctmrinfo", info: { customerId: sub }}) })
+    // waitForTrue(function SDESendExists () { return lpTag && lpTag.sdes && lpTag.sdes.send }, function sendCtmrInfoSDE () {lpTag.sdes.send({ type: "ctmrinfo", info: { customerId: sub }})})
     // disable the button
     document.getElementById('pushIdentity').disabled = true;
     document.getElementById('stepUp').disabled = true;
@@ -62,64 +63,73 @@ function stepUp (sub) {
 }
 
 lpGetAuthenticationToken = function (cb) {
-    if (document.getElementById('authYourJWT').value) return cb(document.getElementById('authYourJWT').value)
-    if (document.getElementById('authHardCode').checked) return cb(document.getElementById('authHardCodedJWT').value)
+    if (window._auth.identity && window._auth.identity.sub) {
+        if (document.getElementById('authYourJWT').value) return cb(document.getElementById('authYourJWT').value)
+        if (document.getElementById('authHardCode').checked) return cb(document.getElementById('authHardCodedJWT').value)
 
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
+        let headers = new Headers();
+        headers.append("Content-Type", "application/json");
 
-    let payload = {
-        iss: window._auth.identity.iss,
-        sub: window._auth.identity.sub
+        let payload = {
+            iss: window._auth.identity.iss,
+            sub: window._auth.identity.sub
+        }
+
+        if (document.getElementById('jwtGivenName').value) payload.given_name = document.getElementById('jwtGivenName').value
+        if (document.getElementById('jwtFamilyName').value) payload.family_name = document.getElementById('jwtFamilyName').value
+        if (document.getElementById('jwtEmail').value) payload.email = document.getElementById('jwtEmail').value
+        // if (document.getElementById('jwtGender').value) payload.gender = document.getElementById('jwtGender').value
+        if (document.getElementById('jwtPreferredUserName').value) payload.preferred_username = document.getElementById('jwtPreferredUserName').value
+        if (document.getElementById('jwtPhoneNumber').value) payload.phone_number = document.getElementById('jwtPhoneNumber').value
+
+        let body = JSON.stringify({ payload, ttl: 600 });
+
+        let requestOptions = {
+            method: 'POST',
+            headers, body
+        };
+
+        fetch(`https://${authDomain}/api/auth/token`, requestOptions)
+          .then(response => response.text().then(text => cb(text)))
+          .catch(error => console.log('error', error));
+    } else {
+        cb(null, 'unauthenticated')
     }
-
-    if (document.getElementById('jwtGivenName').value) payload.given_name = document.getElementById('jwtGivenName').value
-    if (document.getElementById('jwtFamilyName').value) payload.family_name = document.getElementById('jwtFamilyName').value
-    if (document.getElementById('jwtEmail').value) payload.email = document.getElementById('jwtEmail').value
-    // if (document.getElementById('jwtGender').value) payload.gender = document.getElementById('jwtGender').value
-    if (document.getElementById('jwtPreferredUserName').value) payload.preferred_username = document.getElementById('jwtPreferredUserName').value
-    if (document.getElementById('jwtPhoneNumber').value) payload.phone_number = document.getElementById('jwtPhoneNumber').value
-
-    let body = JSON.stringify({ payload, ttl: 600 });
-
-    let requestOptions = {
-        method: 'POST',
-        headers, body
-    };
-
-    fetch(`https://${authDomain}/api/auth/token`, requestOptions)
-      .then(response => response.text().then(text => cb(text)))
-      .catch(error => console.log('error', error));
 }
 
 lpGetAuthenticationCode = function (cb) {
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
+    if (window._auth.identity && window._auth.identity.sub) {
+        let headers = new Headers();
+        headers.append("Content-Type", "application/json");
 
-    let payload = {
-        iss: window._auth.identity.iss,
-        sub: window._auth.identity.sub
+        let payload = {
+            iss: window._auth.identity.iss,
+            sub: window._auth.identity.sub
+        }
+
+        if (document.getElementById('jwtGivenName').value) payload.given_name = document.getElementById('jwtGivenName').value
+        if (document.getElementById('jwtFamilyName').value) payload.family_name = document.getElementById('jwtFamilyName').value
+        if (document.getElementById('jwtEmail').value) payload.email = document.getElementById('jwtEmail').value
+        // if (document.getElementById('jwtGender').value) payload.gender = document.getElementById('jwtGender').value
+        if (document.getElementById('jwtPreferredUserName').value) payload.preferred_username = document.getElementById('jwtPreferredUserName').value
+        if (document.getElementById('jwtPhoneNumber').value) payload.phone_number = document.getElementById('jwtPhoneNumber').value
+
+        let body = JSON.stringify({ payload, ttl: 600 });
+
+        let requestOptions = {
+            method: 'POST',
+            headers, body
+        };
+
+        fetch(`https://${authDomain}/api/auth/code`, requestOptions)
+          .then(response => response.text().then(text => cb(text)))
+          .catch(error => console.log('error', error));
+    } else {
+        cb(null, 'unauthenticated')
     }
-
-    if (document.getElementById('jwtGivenName').value) payload.given_name = document.getElementById('jwtGivenName').value
-    if (document.getElementById('jwtFamilyName').value) payload.family_name = document.getElementById('jwtFamilyName').value
-    if (document.getElementById('jwtEmail').value) payload.email = document.getElementById('jwtEmail').value
-    // if (document.getElementById('jwtGender').value) payload.gender = document.getElementById('jwtGender').value
-    if (document.getElementById('jwtPreferredUserName').value) payload.preferred_username = document.getElementById('jwtPreferredUserName').value
-    if (document.getElementById('jwtPhoneNumber').value) payload.phone_number = document.getElementById('jwtPhoneNumber').value
-
-    let body = JSON.stringify({ payload, ttl: 600 });
-
-    let requestOptions = {
-        method: 'POST',
-        headers, body
-    };
-
-    fetch(`https://${authDomain}/api/auth/code`, requestOptions)
-      .then(response => response.text().then(text => cb(text)))
-      .catch(error => console.log('error', error));
 }
 
 function randomSub () {
     return Math.random().toString(36).substring(2)
 }
+
