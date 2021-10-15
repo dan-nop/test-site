@@ -126,7 +126,8 @@
     <input id="serviceActivityCategory">
     <label for="serviceActivityServiceId">serviceId:</label>
     <input id="serviceActivityServiceId">
-    <button onclick="pushSDE('service')">push()</button>
+    <button onclick="pushSDEs(undefined, 'service')">push()</button>
+    <button onclick="sendSDEs(undefined, 'service')">send()</button>
 
     <h5>Error</h5>
     <label for="errorContextId">contextId:</label>
@@ -139,8 +140,8 @@
     <input id="errorMessage">
     <label for="errorResolved">resolved:</label>
     <input type="checkbox" id="errorResolved">
-    <button onclick="pushSDE('error')">push()</button>
-    <script src="js/util/sdes.js"></script>
+    <button onclick="pushSDEs(undefined, 'error')">push()</button>
+    <button onclick="sendSDEs(undefined, 'error')">send()</button>
 
     <h5>Marketing Source</h5>
     <label for="mrktInfoChannel">channel:</label>
@@ -156,7 +157,14 @@
     <input id="mrktInfoAffiliate">
     <label for="mrktInfoCampaignId">campaignId:</label>
     <input id="mrktInfoCampaignId">
-    <button onclick="pushSDE('mrktInfo')">push()</button>
+    <button onclick="pushSDEs(undefined, 'mrktInfo')">push()</button>
+    <button onclick="sendSDEs(undefined, 'mrktInfo')">send()</button>
+
+    <h5>Searched Content</h5>
+    <label for="searchInfoKeywords">channel:</label>
+    <input id="searchInfoKeywords">
+    <button onclick="pushSDEs(undefined, 'searchInfo')">push()</button>
+    <button onclick="sendSDEs(undefined, 'searchInfo')">send()</button>
   </div>
 <br />
 </body>

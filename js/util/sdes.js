@@ -3,7 +3,19 @@ window.sdes = {}
 // todo: add send
 // todo: separate adding sdes to array from push/send
 
-function pushSDE(type) {
+function pushSDEs(array = [], type) {
+    if (type) addSDE(array, type)
+    console.log(`push payload: ${JSON.stringify(array)}`)
+    lpTag.sdes.push(array);
+}
+
+function sendSDEs(array = [], type) {
+    if (type) addSDE(array, type)
+    console.log(`send payload: ${JSON.stringify(array)}`)
+    lpTag.sdes.send(array);
+}
+
+function addSDE(array = [], type) {
     let payload = {type};
     switch (type) {
         case 'service':
@@ -50,7 +62,14 @@ function pushSDE(type) {
             if (document.getElementById('mrktInfoCampaignId').value) {
                 payload.info.campaignId = document.getElementById('mrktInfoCampaignId').value
             }
+            break;
+        case 'searchInfo':
+            payload.keywords = [];
+            if (document.getElementById('searchInfoKeywords').value) {
+                payload.keywords = document.getElementById('searchInfoKeywords').value.split(',')
+            }
     }
-    console.log(`push payload: ${JSON.stringify(payload)}`)
-    lpTag.sdes.push(payload);
+
+    array.push(payload);
+    return array;
 }
