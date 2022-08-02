@@ -5,14 +5,13 @@ function resuscitatorInit() {
     lpTag.external.resuscitator = {
         start: function () {
             this._mStateBind = lpTag.events.bind('lp_SMT', 'MONITORING_STATE', this._mStateCallback.bind(this))
+            this._mReqErrorBind = lpTag.events.bind('lp_SMT', 'MONITORING_REQUEST_ERROR', this._mReqErrorCallback.bind(this))
             console.log(`${new Date().toLocaleTimeString()} - Resuscitator started`)
         },
 
         stop: function () {
-            if (this._mStateBind) {
-                lpTag.events.unbind(this._mStateBind);
-                delete this._mStateBind
-            }
+            if (this._mStateBind) { lpTag.events.unbind(this._mStateBind); delete this._mStateBind }
+            if (this._mReqErrorBind) { lpTag.events.unbind(this._mReqErrorBind); delete this._mReqErrorBind }
             this._unBindEvents()
             console.log(`${new Date().toLocaleTimeString()} - Resuscitator Stopped`)
         },
@@ -24,10 +23,14 @@ function resuscitatorInit() {
             this._unBindEvents()
         },
 
+        _mReqErrorCallback: function ({ error }) {
+            console.log(`${new Date().toLocaleTimeString()} - Monitoring error: ${error}`);
+            if (error === 44) this._bindEvents()
+        },
+
         _mStateCallback: function ({ active }) {
             console.log(`${new Date().toLocaleTimeString()} - Monitoring: ${active}`);
             if (active) this._unBindEvents()
-            else this._bindEvents()
         },
 
         _activityCallback: function () {
