@@ -6,6 +6,7 @@ function resuscitatorInit() {
         start: function () {
             this._mStateBind = lpTag.events.bind('lp_SMT', 'MONITORING_STATE', this._mStateCallback.bind(this))
             this._mReqErrorBind = lpTag.events.bind('lp_SMT', 'MONITORING_REQUEST_ERROR', this._mReqErrorCallback.bind(this))
+            if (!lpTag.taglets.lp_SMT.isActive()) lpTag.external.resuscitator.restartMonitoring();
             console.log(`${new Date().toLocaleTimeString()} - Resuscitator started`)
         },
 
@@ -13,7 +14,7 @@ function resuscitatorInit() {
             if (this._mStateBind) { lpTag.events.unbind(this._mStateBind); delete this._mStateBind }
             if (this._mReqErrorBind) { lpTag.events.unbind(this._mReqErrorBind); delete this._mReqErrorBind }
             this._unBindEvents()
-            console.log(`${new Date().toLocaleTimeString()} - Resuscitator Stopped`)
+            console.log(`${new Date().toLocaleTimeString()} - Resuscitator stopped`)
         },
 
         restartMonitoring: function () {
@@ -21,6 +22,7 @@ function resuscitatorInit() {
             lpTag.taglets.lp_monitoringSDK.reinit(lpTag.taglets.lp_monitoringSDK.inspect().conf);
             lpTag.taglets.lp_SMT.start();
             this._unBindEvents()
+            console.log(`${new Date().toLocaleTimeString()} - Montirong restarted`)
         },
 
         _mReqErrorCallback: function ({ error }) {
@@ -35,9 +37,7 @@ function resuscitatorInit() {
 
         _activityCallback: function () {
             console.log(`${new Date().toLocaleTimeString()} - Activity detected`)
-            if (!lpTag.taglets.lp_SMT.isActive()) {
-                lpTag.external.resuscitator.restartMonitoring();
-            }
+            if (!lpTag.taglets.lp_SMT.isActive()) lpTag.external.resuscitator.restartMonitoring();
         },
 
         _bindEvents: function () {
