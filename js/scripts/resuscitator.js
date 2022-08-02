@@ -22,7 +22,7 @@ function resuscitatorInit() {
             lpTag.taglets.lp_monitoringSDK.reinit(lpTag.taglets.lp_monitoringSDK.inspect().conf);
             lpTag.taglets.lp_SMT.start();
             this._unBindEvents()
-            console.log(`${new Date().toLocaleTimeString()} - Montirong restarted`)
+            console.log(`${new Date().toLocaleTimeString()} - Monitoring restarted`)
         },
 
         _mReqErrorCallback: function ({ error }) {
