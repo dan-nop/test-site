@@ -4,6 +4,7 @@ lpTag.identities = lpTag.identities || [];
 window._auth = window._auth || {};
 
 window._auth.identity = null;
+window._auth.authServer = params.get('auth-server') || 'supportlab.lpnet.com'
 
 if (params.has('externalauth')) {
     // if external param is specified use the hardcoded jwt since auth will be unreachable
@@ -25,11 +26,6 @@ if (params.has('sub')) {
     location.reload()
 }
 
-let authDomain = 'supportlab.lpnet.com'
-if (params.has('auth-ngrok')) {
-    authDomain = `${params.get('auth-ngrok')}.ngrok.io`
-}
-
 function pushIdentity (sub, fromButton = false) {
     // get sub from arguments, or from js context, or from queryparams, or generate randomly
     sub = sub || window._auth.sub || params.get('sub') || randomSub()
@@ -38,7 +34,7 @@ function pushIdentity (sub, fromButton = false) {
     document.getElementById('authSub').value = sub;
     document.getElementById('authSub').disabled = true;
     window._auth.identity = {
-        iss: document.location.host,
+        iss: `https://${window._auth.authServer}`,
         acr: 'loa1',
         sub
     }
@@ -63,41 +59,16 @@ function stepUp (sub) {
 }
 
 lpGetAuthenticationToken = function (cb) {
-    if (window._auth.identity && window._auth.identity.sub) {
-        if (document.getElementById('authYourJWT').value) return cb(document.getElementById('authYourJWT').value)
-        if (document.getElementById('authHardCode').checked) return cb(document.getElementById('authHardCodedJWT').value)
-
-        let headers = new Headers();
-        headers.append("Content-Type", "application/json");
-
-        let payload = {
-            iss: window._auth.identity.iss,
-            sub: window._auth.identity.sub
-        }
-
-        if (document.getElementById('jwtGivenName').value) payload.given_name = document.getElementById('jwtGivenName').value
-        if (document.getElementById('jwtFamilyName').value) payload.family_name = document.getElementById('jwtFamilyName').value
-        if (document.getElementById('jwtEmail').value) payload.email = document.getElementById('jwtEmail').value
-        // if (document.getElementById('jwtGender').value) payload.gender = document.getElementById('jwtGender').value
-        if (document.getElementById('jwtPreferredUserName').value) payload.preferred_username = document.getElementById('jwtPreferredUserName').value
-        if (document.getElementById('jwtPhoneNumber').value) payload.phone_number = document.getElementById('jwtPhoneNumber').value
-
-        let body = JSON.stringify({ payload, ttl: 600 });
-
-        let requestOptions = {
-            method: 'POST',
-            headers, body
-        };
-
-        fetch(`https://${authDomain}/api/auth/token`, requestOptions)
-          .then(response => response.text().then(text => cb(text)))
-          .catch(error => console.log('error', error));
-    } else {
-        cb(null, 'unauthenticated')
-    }
+    if (document.getElementById('authYourJWT').value) return cb(document.getElementById('authYourJWT').value)
+    else if (document.getElementById('authHardCode').checked) return cb(document.getElementById('authHardCodedJWT').value)
+    else return lpGetAuthenticationString('token', cb)
 }
 
 lpGetAuthenticationCode = function (cb) {
+    return lpGetAuthenticationString('code', cb)
+}
+
+lpGetAuthenticationString = function (type, cb) {
     if (window._auth.identity && window._auth.identity.sub) {
         let headers = new Headers();
         headers.append("Content-Type", "application/json");
@@ -121,7 +92,7 @@ lpGetAuthenticationCode = function (cb) {
             headers, body
         };
 
-        fetch(`https://${authDomain}/api/auth/code`, requestOptions)
+        fetch(`https://${window._auth.authServer}/auth/${type}`, requestOptions)
           .then(response => response.text().then(text => cb(text)))
           .catch(error => console.log('error', error));
     } else {
@@ -132,4 +103,6 @@ lpGetAuthenticationCode = function (cb) {
 function randomSub () {
     return Math.random().toString(36).substring(2)
 }
+
+var lpMethods = { lpGetAuthenticationToken }
 

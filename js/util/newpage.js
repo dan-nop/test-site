@@ -4,7 +4,7 @@ function newPageInit() {
 
 function newPage() {
     lpTag.newPage(document.URL, {
-        section: document.getElementById('newPageSections').value.split(',')
+        section: document.getElementById('newPageSections').value.split(',').filter(Boolean)
     })
 }
 

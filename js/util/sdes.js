@@ -1,8 +1,5 @@
 window.sdes = {}
 
-// todo: add send
-// todo: separate adding sdes to array from push/send
-
 function pushSDEs(array = [], type) {
     if (type) addSDE(array, type)
     console.log(`push payload: ${JSON.stringify(array)}`)
