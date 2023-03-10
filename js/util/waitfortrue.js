@@ -1,16 +1,25 @@
-// todo: find a way to make this work. promises?
-function waitForTrue (test, callback) {
+window._intervals = window._intervals || {};
+function waitForTrue (test, callback, interval = 1000) {
     if (test()) callback();
     else {
-        window._intervals = window._intervals || {};
-        console.log(`delaying execution of ${callback.name} until ${test.name}`)
-        window._intervals[test.name][callback.name] = window.setInterval(test, callback => {
+        let testName = test.name || 'anonymous';
+        let callbackName = callback.name || 'anonymous';
+        console.log(`delaying execution of ${callbackName} until ${testName}`)
+        window._intervals[testName] = window._intervals[testName] || {};
+        window._intervals[testName][callback.name || 'anonymous'] = window.setInterval((test, callback) => {
+            let testName = test.name || 'anonymous';
+            let callbackName = callback.name || 'anonymous';
             if (test()) {
-                window.clearInterval(window._intervals[test.name][callback.name]);
+                console.log(`${testName} passed, executing ${callbackName}`)
+                window.clearInterval(window._intervals[testName][callbackName]);
                 callback();
             } else {
-                console.log(`delaying execution of ${callback.name} until ${test.name}`)
+                console.log(`delaying execution of ${callbackName} until ${testName}`)
             }
-        },500);
+        }, interval, test, callback);
     }
+}
+
+function waitForTag(callback) {
+    waitForTrue(function _waitForTagTest () { return window.lpTag?.isDom }, callback)
 }
